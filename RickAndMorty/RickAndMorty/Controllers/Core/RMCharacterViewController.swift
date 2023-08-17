@@ -7,6 +7,7 @@
 
 import UIKit
 
+///контроллер персонажей для отображения 
 final class RMCharacterViewController: UIViewController {
 
     override func viewDidLoad() {

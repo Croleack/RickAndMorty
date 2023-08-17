@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+///контроллер эпизодов для отображения 
 final class RMEpisodeViewController: UIViewController {
 
     override func viewDidLoad() {

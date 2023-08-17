@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+///контроллер для отображении различных параметров
 final class RMSettingViewController: UIViewController {
 
     override func viewDidLoad() {
