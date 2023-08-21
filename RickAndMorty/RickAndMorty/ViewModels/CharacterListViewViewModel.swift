@@ -7,30 +7,67 @@
 
 import UIKit
 
+protocol RMCharacterListViewViewModelDelegate: AnyObject {
+    //загрузка начальных символов
+    func didLoadInitialCharacters()
+    func didSelectCharacter(_ character: RMCharacter)
+}
+
+
 final class CharacterListViewViewModel: NSObject {
-    func fetchCharacters() {
-        RMService.shared.execute(.listCaractersRequests,
-                                 expecting: RMGetAllCharactersResponse.self) {result in
-            switch result {
-            case.success(let model):
-                print("Total: "+String(model.info.pages))
-                print("Page result count: "+String(model.results.count))
-            case.failure(let error):
-                print(String(describing: error))
+    
+    public weak var delegate: RMCharacterListViewViewModelDelegate?
+     
+    private var characters: [RMCharacter] = [] {
+        didSet {
+            for character in characters {
+                let viewModel = RMCharacterCollectionViewCellViewModel(characterName: character.name, characterImageUrl: URL(string: character.image)
+                )
+                //теперь мы говорим модели просмотра ячеек
+                cellViewModels.append(viewModel)
             }
+           
         }
     }
+    
+    private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
+    
+    
+    
+     
+   public func fetchCharacters() {
+       RMService.shared.execute(.listCaractersRequests,
+                                expecting: RMGetAllCharactersResponse.self
+                                //настройка утечки памяти есть
+       ) { [weak self] result in
+           switch result {
+           case.success(let responseModel):
+               let results = responseModel.results
+               self?.characters = results
+               DispatchQueue.main.async {
+                   self?.delegate?.didLoadInitialCharacters()
+               }
+               
+           case.failure(let error):
+               print(String(describing: error))
+           }
+       }
+   }
 }
 //чтобы модель соответствовала этим протоколам
 extension CharacterListViewViewModel: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return cellViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
+       guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
-            for: indexPath)
+            for: indexPath
+       ) as? RMCharacterCollectionViewCell else {
+            fatalError("неподерживаемая ячейка")
+       }
+        cell.configure(with: cellViewModels[indexPath.row])
         return cell
     }
     
@@ -43,5 +80,12 @@ extension CharacterListViewViewModel: UICollectionViewDataSource, UICollectionVi
             width: width,
             height: width * 1.5
         )
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        //мы хотим знать какой объект выбрал пользователь
+        let character = characters[indexPath.row]
+        delegate?.didSelectCharacter(character)
     }
 }

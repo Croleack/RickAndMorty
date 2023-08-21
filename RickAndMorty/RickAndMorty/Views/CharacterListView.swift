@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol CharacterListViewDelegate: AnyObject {
+    func rmCharacterListView(
+        _ characterListView: CharacterListView,
+        didSelectCharacter character: RMCharacter
+    )
+}
+
 ///представление брабатывают отображение списка, загрузчика символов
-final class CharacterListView: UIView {
+ final class CharacterListView: UIView {
+    
+    public weak var delegate: CharacterListViewDelegate?
     
     private let viewModel = CharacterListViewViewModel()
     
@@ -46,6 +55,7 @@ final class CharacterListView: UIView {
         addSubViews(collectionView, spinner)
         addConstraint()
         spinner.startAnimating()
+        viewModel.delegate = self
         viewModel.fetchCharacters()
         
         setUpColectionView()
@@ -87,5 +97,17 @@ final class CharacterListView: UIView {
                 self.collectionView.alpha = 1
             })
         })
+    }
+}
+
+extension CharacterListView: RMCharacterListViewViewModelDelegate {
+    func didLoadInitialCharacters() {
+        collectionView.reloadData()
+    }
+    
+    
+    func didSelectCharacter(_ character: RMCharacter) {
+        
+        delegate?.rmCharacterListView(self, didSelectCharacter: character)
     }
 }

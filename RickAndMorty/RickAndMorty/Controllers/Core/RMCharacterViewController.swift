@@ -8,7 +8,13 @@
 import UIKit
 
 ///контроллер персонажей для отображения 
-final class RMCharacterViewController: UIViewController {
+final class RMCharacterViewController: UIViewController, CharacterListViewDelegate {
+    func didLoadInitialCharacters() {
+    }
+    
+    func didSelectCharacter(_ character: RMCharacter) {
+    }
+    
     //добавим представление персонажей
     private let characterListView = CharacterListView()
     
@@ -22,6 +28,7 @@ final class RMCharacterViewController: UIViewController {
         setUpView()
     }
         private func setUpView() {
+            characterListView.delegate = self
             view.addSubview(characterListView)
             //настроим некоторые ограничения
             NSLayoutConstraint.activate([
@@ -32,5 +39,12 @@ final class RMCharacterViewController: UIViewController {
                 characterListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             ])
         }
-  
+    func rmCharacterListView(_ characterListView: CharacterListView, didSelectCharacter character: RMCharacter){
+        print("Selected character: \(character.name)")
+        //открыть контроллер деталей
+        let viewModel = RMCharacterDetalViewViewModel(character: character)
+        let detalVC = RMCharacterDetalViewController(viewModel: viewModel)
+        navigationController?.pushViewController(detalVC, animated: true)
+        
+    }
 }
