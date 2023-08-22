@@ -8,7 +8,7 @@
 import UIKit
 
 protocol RMCharacterListViewViewModelDelegate: AnyObject {
-    //загрузка начальных символов
+
     func didLoadInitialCharacters()
     func didSelectCharacter(_ character: RMCharacter)
 }
@@ -23,7 +23,6 @@ final class CharacterListViewViewModel: NSObject {
             for character in characters {
                 let viewModel = RMCharacterCollectionViewCellViewModel(characterName: character.name, characterImageUrl: URL(string: character.image)
                 )
-                //теперь мы говорим модели просмотра ячеек
                 cellViewModels.append(viewModel)
             }
            
@@ -38,7 +37,6 @@ final class CharacterListViewViewModel: NSObject {
    public func fetchCharacters() {
        RMService.shared.execute(.listCaractersRequests,
                                 expecting: RMGetAllCharactersResponse.self
-                                //настройка утечки памяти есть
        ) { [weak self] result in
            switch result {
            case.success(let responseModel):
@@ -54,7 +52,7 @@ final class CharacterListViewViewModel: NSObject {
        }
    }
 }
-//чтобы модель соответствовала этим протоколам
+
 extension CharacterListViewViewModel: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellViewModels.count
@@ -71,12 +69,12 @@ extension CharacterListViewViewModel: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
-    //благодаря этому протоколу UICollectionViewDelegateFlowLayout которая позволяет задавать размеры ячеек
+    //thanks to the UICollectionViewDelegateFlowLayout protocol, it is possible to set cell sizes
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         let bounds = UIScreen.main.bounds
         let width = (bounds.width - 30)/2
         return CGSize(
-            //поскольку размеры устройств разные чтобы не пистаь здесь константу мы получим размер экрана нашего устройства
+            //for different devices
             width: width,
             height: width * 1.5
         )
@@ -84,7 +82,7 @@ extension CharacterListViewViewModel: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        //мы хотим знать какой объект выбрал пользователь
+        //we want to know which object the user has selected
         let character = characters[indexPath.row]
         delegate?.didSelectCharacter(character)
     }

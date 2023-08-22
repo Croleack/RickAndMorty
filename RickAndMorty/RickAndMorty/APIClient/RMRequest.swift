@@ -6,26 +6,22 @@
 //
 
 import Foundation
-///объект, который представляет один вызов API 
+///an object that represents a single API call
 final class RMRequest {
     
-    //любой наш запрос содержит всю необходимую информацию
-    //базовый URL
-    //конечные точки Edpoint
-    //компонент пути
     ///Константы API
     private struct Constans {
         static let baseUrl = "https://rickandmortyapi.com/api"
     }
 
     private var endpoint = RMEndpoint.character
-    //позволит добавлять компонент в конце пути 
+    //will add a component at the end of the path
     private let pathComponents: [String]
-    //аргументы запроса для api если такие есть
+    //request arguments for api if any
     private let queryParamers: [URLQueryItem]
-    //сконстуированный URL адрес запроса api в строковой форме
+    //constructed api request url in string form
     private var urlString: String {
-        //получаем базовый URL
+        //get base url
         var string = Constans.baseUrl
         string += "/"
         string += endpoint.rawValue
@@ -50,7 +46,7 @@ final class RMRequest {
         return string
     }
     
-    //вычисляемое свойство и созданный URL адрес API
+    //computed property and generated API URL
     public var url: URL? {
         return URL(string: urlString)
     }
@@ -59,7 +55,6 @@ final class RMRequest {
     
     init(
        endpoint: RMEndpoint,
-        //они могут быть пустыми
         pathComponents: [String] = [],
         queryParamers: [URLQueryItem] = []
     ) {

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-///контроллер для отображении различных параметров
+
 final class RMSettingViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -14,6 +14,8 @@ final class RMSettingViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         title = "Settings"
+        
+        
     }
 
 }

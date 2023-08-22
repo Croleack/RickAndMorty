@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//контроллер для корректного изображения одного символа
 
 class RMCharacterDetalViewController: UIViewController {
 
@@ -18,9 +17,10 @@ class RMCharacterDetalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // Функция жизненного цикла
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        
     }
 }

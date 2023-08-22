@@ -6,26 +6,21 @@
 //
 
 import Foundation
-///Основной объект службы API для получения данных  (get)
+///The main API service object for getting data (get)
 final class RMService {
-    ///общий экзампляр
+    ///common instance
     static let shared = RMService()
     
     private init() {}
     
     enum RMServiceError: Error {
-        //не удалось создать запрос подобные этому
+    
         case failedToCreateRequest
-        //не удалось получить данные
         case failedToGetData
         
     }
     
-    ///отправляем вызов API
-    ///request - экземпляр запроса
-    ///completion - обратный вызов с данными или ошибкой 
-    
-    //мы будем создавать запрос и получать некий данный Void
+    //we will create a request and receive some Void data
     public func execute<T: Codable>(
         _ request: RMRequest,
         expecting type: T.Type,
@@ -40,28 +35,25 @@ final class RMService {
                             
                             
                             
-        //создаем задачу
+        //create a task
         let task = URLSession.shared.dataTask(with: urlRequest) {
-            //response - _
             data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(error ?? RMServiceError.failedToGetData))
                 return
             }
-        //декодировать ответ на конкретный объект
+        //decode the response to a specific object
             do {
                 let result = try
                 JSONDecoder().decode(type.self, from: data)
                 completion(.success(result))
             }
             catch {
-                //error обработчик завершения
                 completion(.failure(error))
             }
         }
         task.resume()
     }
-    //переведем наш request в url запрос
     private func request(from rmRequest: RMRequest) -> URLRequest? {
         guard let url = rmRequest.url else {
             return nil

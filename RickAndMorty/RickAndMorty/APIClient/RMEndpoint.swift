@@ -6,8 +6,7 @@
 //
 
 import Foundation
-///представление уникальных конечных точек API
-//переяисления @frozan - гугли что это 
+
 @frozen enum RMEndpoint: String {
     ///конечная точка для получении информации о персонаже
     case character

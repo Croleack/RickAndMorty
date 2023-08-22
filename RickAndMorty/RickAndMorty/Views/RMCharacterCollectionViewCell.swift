@@ -6,10 +6,10 @@
 //
 
 import UIKit
-//мы должны фактически зарегистрировать эту ячейку для персонажа
+//cell registration for character
 final class RMCharacterCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "RMСharacterCollectionViewCell"
-    //представление нашего изображения
+   
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -38,7 +38,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //цвет фона контента снова будет вторичным
+        
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(imageView)
         contentView.addSubview(nameLabel)
@@ -51,7 +51,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     
     private func addConstraint() {
         NSLayoutConstraint.activate([
-        //указываем параметры размещения всех элементов на одной ячейки (Размеры высоты)
+        //specify the placement parameters for all elements in one cell
             statusLabel.heightAnchor.constraint(equalToConstant: 40),
             nameLabel.heightAnchor.constraint(equalToConstant: 40),
            
@@ -80,7 +80,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         
         
     }
-    //подготовка этой ячейки к повторному использованию
+    //preparing this cell for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -88,16 +88,13 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         statusLabel.text = nil
     }
     
-    //переопределение ячейки. в этом куске очень важная информация о утечке памяти 
     public func configure(with viewModel: RMCharacterCollectionViewCellViewModel) {
         nameLabel.text = viewModel.characterName
-        //выборка изображения. weak self - чтобы не было утечки памяти
+        
         viewModel.fetchImage { [weak self]result in
             switch result {
             case .success(let data):
-                //создаем изображение в основном потоке
                 DispatchQueue.main.async {
-                    //изображение - это изображение пользовательского интерефейса
                     let image = UIImage(data: data)
                     self?.imageView.image = image
                 }

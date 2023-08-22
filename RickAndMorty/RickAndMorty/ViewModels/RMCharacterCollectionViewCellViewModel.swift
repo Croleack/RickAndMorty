@@ -21,11 +21,11 @@ private let characterImageUrl: URL?
         self.characterImageUrl = characterImageUrl
     }
     
-    //функция извлечения содержимого изображения
+    //image content extraction function
     public func fetchImage(completion: @escaping(Result<Data, Error>) -> Void) {
         //TODO: Abstract to Image Manager 
         guard let url = characterImageUrl else {
-            //ошибка неверного url адреса
+            //invalid url error
             completion(.failure(URLError(.badURL)))
             return
         }

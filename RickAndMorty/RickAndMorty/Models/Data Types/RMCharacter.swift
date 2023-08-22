@@ -6,7 +6,7 @@
 //
 
 import Foundation
-//декодируем данные полученные от API
+
 struct RMCharacter: Codable {
        let id: Int
        let name: String

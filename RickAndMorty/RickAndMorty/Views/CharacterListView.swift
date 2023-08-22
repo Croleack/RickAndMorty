@@ -14,7 +14,7 @@ protocol CharacterListViewDelegate: AnyObject {
     )
 }
 
-///представление брабатывают отображение списка, загрузчика символов
+///view process list display, symbol loader
  final class CharacterListView: UIView {
     
     public weak var delegate: CharacterListViewDelegate?
@@ -23,35 +23,32 @@ protocol CharacterListViewDelegate: AnyObject {
     
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
-        //cкрывает при остановке
         spinner.hidesWhenStopped = true
-        //переводит маску автоматически изменяет размер
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
     
-    //смоделируем сетку представления коллекция
+    //model the view grid collection
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        //вставка в макете
+   
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
-        //красивая анимация
+       
         collectionView.alpha = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        //индентификатор cell
+       
         collectionView.register(RMCharacterCollectionViewCell.self, forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
         return collectionView
     }()
     
     
-//переопределим
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        //вспомогательное представление
+     
         addSubViews(collectionView, spinner)
         addConstraint()
         spinner.startAnimating()
@@ -66,7 +63,6 @@ protocol CharacterListViewDelegate: AnyObject {
         fatalError("Unsupported")
     }
     
-    //дополнительная функция о добавлении ограничении
     private func addConstraint() {
         NSLayoutConstraint.activate([
             spinner.widthAnchor.constraint(equalToConstant: 100),
@@ -83,16 +79,14 @@ protocol CharacterListViewDelegate: AnyObject {
     
     private func setUpColectionView() {
         collectionView.dataSource = viewModel
-        //создаем два столбца
         collectionView.delegate = viewModel
         
         
-        //избався от счетчика и покажи представление коллекции через 2 секунды
+        //get rid of the counter and show the collection view after 2 seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
             self.spinner.stopAnimating()
             
             self.collectionView.isHidden = false
-            //уже не прозрачно
             UIView.animate(withDuration: 0.4, animations: {
                 self.collectionView.alpha = 1
             })

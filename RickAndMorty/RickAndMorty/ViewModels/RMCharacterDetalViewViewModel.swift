@@ -10,7 +10,6 @@ import Foundation
 final class RMCharacterDetalViewViewModel {
     private let character: RMCharacter
     
-    //мы должны передать правильное название персонажа
     init (character: RMCharacter) {
         self.character = character
     }

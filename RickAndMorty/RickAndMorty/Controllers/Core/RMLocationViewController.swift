@@ -6,7 +6,7 @@
 //
 
 import UIKit
-///контроллер локации для отображения 
+
 final class RMLocationViewController: UIViewController {
 
     override func viewDidLoad() {
