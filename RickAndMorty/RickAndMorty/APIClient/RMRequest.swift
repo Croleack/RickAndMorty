@@ -13,7 +13,16 @@ final class RMRequest {
     private struct Constans {
         static let baseUrl = "https://rickandmortyapi.com/api"
     }
+    
+    //chat gpt
+        func generateURL() -> URL? {
+        var urlComponents = URLComponents(string: Constans.baseUrl)
+        urlComponents?.path = "/" + endpoint.rawValue
+        urlComponents?.queryItems = queryParamers
 
+        return urlComponents?.url
+    }
+    
     private var endpoint = RMEndpoint.character
     //will add a component at the end of the path
     private let pathComponents: [String]
@@ -64,6 +73,9 @@ final class RMRequest {
         
     }
     
+    
+    
+    
     //https://rickandmortyapi.com/api/character/2
 }
 
@@ -71,3 +83,4 @@ final class RMRequest {
 extension RMRequest {
     static let listCaractersRequests = RMRequest(endpoint: .character)
 }
+

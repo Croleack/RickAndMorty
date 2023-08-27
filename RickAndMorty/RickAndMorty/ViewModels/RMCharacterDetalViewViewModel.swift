@@ -24,11 +24,15 @@ final class RMCharacterDetalViewViewModel {
     }
     
     public func fetchCharacterData() {
-        print(character.url)
-        guard let request = RMRequest(url: url) else {
-            return
+        let request = RMRequest(endpoint: .character)
+        if let url = request.generateURL() {
+            // Теперь у вас есть корректно сформированный URL для запроса
+            print(url)
+            // Здесь вы можете выполнять сетевые запросы с использованием полученного URL
+     
+            }
+        print(request.url)
         }
        
     }
     
-}

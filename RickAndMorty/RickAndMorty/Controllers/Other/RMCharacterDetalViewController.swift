@@ -10,12 +10,14 @@ import UIKit
 class RMCharacterDetalViewController: UIViewController {
     
     private let detailView = RMCharacterDetalView()
+    private let viewModel: RMCharacterDetalViewViewModel
     
     // MARK: - INIT
     
     init(viewModel: RMCharacterDetalViewViewModel) {
-        super.init(nibName: nil, bundle: nil)
-    }
+         self.viewModel = viewModel // Сохраняем viewModel в свойстве класса
+         super.init(nibName: nil, bundle: nil)
+     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -31,8 +33,7 @@ class RMCharacterDetalViewController: UIViewController {
                                                              target: self,
                                                              action: #selector(didTapShare))
         addConstraints()
-        viewModel.fetchCharacterData  ()
-        
+        viewModel.fetchCharacterData()
     }
     
     
